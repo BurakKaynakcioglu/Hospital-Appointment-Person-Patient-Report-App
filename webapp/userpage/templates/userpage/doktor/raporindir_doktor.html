@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+  rel="stylesheet" 
+  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+  crossorigin="anonymous">
+  <title>User</title>
+</head>
+
+<body>
+<div class="container mt-3">
+
+<form id="post-form-download">
+    {% csrf_token %}
+    <div class="mb-3 mt-5">
+      <label for="cinsiyet" class="form-label">İndirmek istediğiniz raporun ID'sini seçiniz.</label>
+      <select class="form-select" id="rapor_ID" name="rapor_ID">
+        <option value="seçilmedi">Lütfen seçiniz</option>
+        {% for rapor in raporlar %}
+        <option value="{{ rapor.raporID }}">{{ rapor.raporID }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mt-1 mb-5">
+      <button type="submit" id="download" class="btn btn-primary btn-lg">Raporları İndir</button>
+    </div>
+  </form>
+
+</div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).on('submit', '#post-form-download', function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        type:'POST',
+        url:"{% url 'download' %}",
+        data:{
+            rapor_ID:$('#rapor_ID').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function() {
+
+        }
+    });
+      
+    alert('Rapor başarılı bir şekilde masaüstüne indirildi.');
+});
+
+</script>
+
+
+</html>
